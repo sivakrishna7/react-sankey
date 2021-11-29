@@ -13,7 +13,6 @@ import SankeyLink from "./SankeyLink";
 import SankeyNode from "./SankeyNode";
 import { getInnerDimensions } from "../../utils/getInnerDimensions";
 import _ from "lodash";
-import { useEffect } from "react";
 
 const ALIGNMENTS = {
   justify: sankeyJustify,
@@ -39,7 +38,7 @@ const SankeyChart = ({
   height,
   align = "justify",
   layout = 50,
-  onLinkClick,
+  openModal,
   onLinkMouseOver,
   onLinkMouseOut,
 }) => {
@@ -47,9 +46,7 @@ const SankeyChart = ({
     nodes: _.cloneDeep(nodes),
     links: _.cloneDeep(links),
   };
-  // useEffect(() => {
 
-  // }, [nodes, links])
   const { marginLeft, marginTop, marginRight, marginBottom } =
     getInnerDimensions(
       {
@@ -83,8 +80,10 @@ const SankeyChart = ({
         {chartData.nodes.map((node, i) => {
           return (
             <SankeyNode
+              onNodeClick={openModal}
               key={node.name}
               {...node}
+              node={node}
               color={color(colorScale(i)).hex()}
               width={width}
             />
@@ -97,7 +96,7 @@ const SankeyChart = ({
               color={color(colorScale(link.source.index)).hex()}
               key={`sankey-link-${i}`}
               strokeWidth={Math.max(1, link.width)}
-              onLinkClick={onLinkClick}
+              onLinkClick={openModal}
               onLinkMouseOver={onLinkMouseOver}
               onLinkMouseOut={onLinkMouseOut}
               node={link}
@@ -132,7 +131,7 @@ SankeyChart.propTypes = {
     PropTypes.number,
   ]),
   nodeWidth: PropTypes.number,
-  onLinkClick: PropTypes.func,
+  openModal: PropTypes.func,
   onLinkMouseOver: PropTypes.func,
   onLinkMouseOut: PropTypes.func,
   width: PropTypes.number.isRequired,

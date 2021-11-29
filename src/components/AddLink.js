@@ -11,7 +11,7 @@ const AddLink = () => {
     target: NaN,
     weight: "Weight",
   });
-  const { nodes, links } = useSelector((store) => store.transactions);
+  const { nodes } = useSelector((store) => store.transactions);
   const { addLink } = useActions();
 
   const handleChange = (key) => {

@@ -37,7 +37,7 @@ const HomePage = () => {
   const { t } = useTranslation();
   const { transactions, modalState } = useSelector((store) => store);
   const { nodes, links, error, loading } = transactions;
-  const { activeLink, showUpdateLinkModal, activeLinkWeight } = modalState;
+  const { activeItem, showUpdateModal, activeItemValue, itemType } = modalState;
 
   const divRef = useRef(null);
   const { height, width } = useDimension(divRef);
@@ -46,29 +46,41 @@ const HomePage = () => {
     updateLinkAndCloseModal,
     openModalAndSetActiveItem,
     closeModalAndRemoveActiveItem,
-    updateActiveLinkWeight,
+    updateActiveItemValue,
+    updateNodeAndCloseModal,
   } = useActions();
-  const handleLinkClick = (link) => {
-    openModalAndSetActiveItem({ link });
+  const openModal = (item) => {
+    openModalAndSetActiveItem({ item });
   };
   const closeModal = () => {
     closeModalAndRemoveActiveItem();
   };
   const closeAndSaveModal = () => {
-    updateLinkAndCloseModal({
-      source: activeLink.source,
-      target: activeLink.target,
-      value: activeLinkWeight,
-    });
+    if (itemType === "node") {
+      updateNodeAndCloseModal({
+        id: activeItem.index,
+        name: activeItemValue,
+      });
+    } else {
+      updateLinkAndCloseModal({
+        source: activeItem.source,
+        target: activeItem.target,
+        value: activeItemValue,
+      });
+    }
   };
   const handleMouseOver = () => {};
   const handleMouseOut = () => {};
   const handleInputChange = (event) => {
-    const linkWeight = parseInt(event.target.value);
-    if (!isNaN(linkWeight) && linkWeight >= 0) {
-      updateActiveLinkWeight({ value: linkWeight });
-    } else if (event.target.value === "") {
-      updateActiveLinkWeight({ value: event.target.value });
+    if (itemType === "node") {
+      updateActiveItemValue({ value: event.target.value });
+    } else if (itemType === "link") {
+      const linkWeight = parseInt(event.target.value);
+      if (!isNaN(linkWeight) && linkWeight >= 0) {
+        updateActiveItemValue({ value: linkWeight });
+      } else if (event.target.value === "") {
+        updateActiveItemValue({ value: event.target.value });
+      }
     }
   };
 
@@ -77,14 +89,6 @@ const HomePage = () => {
 
   return (
     <div ref={divRef} style={styles.homeContainer}>
-      {`${
-        showUpdateLinkModal
-          ? `${nodes[activeLink.source.index].name} -> ${
-              nodes[activeLink.target.index].name
-            }`
-          : "None"
-      } selected`}
-
       <Typography variant="h4" style={{ textAlign: "center" }}>
         {t("cashFlow")}
       </Typography>
@@ -103,35 +107,26 @@ const HomePage = () => {
           links={links}
           width={width * 0.9}
           height={height * 0.8}
-          onLinkClick={handleLinkClick}
+          openModal={openModal}
           onLinkMouseOver={handleMouseOver}
           onLinkMouseOut={handleMouseOut}
         />
       )}
       <Modal
-        isOpen={showUpdateLinkModal}
+        isOpen={showUpdateModal}
         onRequestClose={closeModal}
         style={styles.modal}
       >
         <Grid paddingBottom="1em">
           <Typography variant="h5" style={{ textAlign: "center" }}>
-            Update Link Weight
+            {itemType === "node" ? "Update Node Name" : "Update Link Weight"}
           </Typography>
         </Grid>
-        <Grid container item xs={12} justifyContent="space-between">
-          <Typography variant="p">
-            Source: {activeLink.source && activeLink.source.name}
-          </Typography>
-          <Typography variant="p">
-            Target: {activeLink.target && activeLink.target.name}
-          </Typography>
-        </Grid>
-
         <TextField
           autoFocus
           margin="dense"
           id="link-update"
-          value={activeLinkWeight}
+          value={activeItemValue}
           fullWidth
           onChange={handleInputChange}
           variant="standard"

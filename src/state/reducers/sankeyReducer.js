@@ -82,10 +82,14 @@ const reducer = (state = initialState, action) => {
         return { ...state, links: updatedLinks };
       }
       return state;
-    // case ActionType.UPDATE_NODE:
-    //   const { id, name } = action.payload;
-    //   state.nodes[id]["name"] = name;
-    //   return deepCopy(state);
+    case ActionType.UPDATE_NODE:
+      const immutableNodes = state.nodes.map((node, i) => {
+        if (i === action.payload.id) {
+          node.name = action.payload.name;
+        }
+        return node;
+      });
+      return { ...state, nodes: immutableNodes };
     default:
       return state;
   }

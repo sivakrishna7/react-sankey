@@ -37,21 +37,28 @@ export const loadData = (remoteFetch = false) => {
 export const updateLinkAndCloseModal = (payload) => {
   return (dispatch) => {
     dispatch({ type: ActionType.UPDATE_LINK, payload });
-    dispatch({ type: ActionType.UNSET_ACTIVE_LINK });
+    dispatch({ type: ActionType.UNSET_ACTIVE_ITEM });
+  };
+};
+
+export const updateNodeAndCloseModal = (payload) => {
+  return (dispatch) => {
+    dispatch({ type: ActionType.UPDATE_NODE, payload });
+    dispatch({ type: ActionType.UNSET_ACTIVE_ITEM });
   };
 };
 
 export const openModalAndSetActiveItem = (payload) => {
-  return (dispatch) => dispatch({ type: ActionType.SET_ACTIVE_LINK, payload });
+  return (dispatch) => dispatch({ type: ActionType.SET_ACTIVE_ITEM, payload });
 };
 
 export const closeModalAndRemoveActiveItem = () => {
-  return (dispatch) => dispatch({ type: ActionType.UNSET_ACTIVE_LINK });
+  return (dispatch) => dispatch({ type: ActionType.UNSET_ACTIVE_ITEM });
 };
 
-export const updateActiveLinkWeight = (payload) => {
+export const updateActiveItemValue = (payload) => {
   return (dispatch) =>
-    dispatch({ type: ActionType.UPDATE_ACTIVE_LINK_WEIGHT, payload });
+    dispatch({ type: ActionType.UPDATE_ACTIVE_ITEM_VALUE, payload });
 };
 
 export const addNode = (payload) => {
@@ -60,4 +67,8 @@ export const addNode = (payload) => {
 
 export const addLink = (payload) => {
   return (dispatch) => dispatch({ type: ActionType.ADD_LINK, payload });
+};
+
+export const changeLanguage = (payload) => {
+  return (dispatch) => dispatch({ type: ActionType.CHANGE_LANGUAGE, payload });
 };

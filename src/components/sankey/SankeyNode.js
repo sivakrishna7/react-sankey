@@ -7,7 +7,19 @@ const NODE_LABEL_PADDING = 6;
 const formatNumber = d3.format(",.0f");
 const format = (d) => formatNumber(d);
 
-const SankeyNode = ({ id, name, value, width, x0, x1, y0, y1, color }) => {
+const SankeyNode = ({
+  node,
+  id,
+  name,
+  value,
+  width,
+  x0,
+  x1,
+  y0,
+  y1,
+  color,
+  onNodeClick,
+}) => {
   const { t } = useTranslation();
   return (
     <g key={id}>
@@ -18,6 +30,7 @@ const SankeyNode = ({ id, name, value, width, x0, x1, y0, y1, color }) => {
         height={y1 - y0}
         fill={color}
         cursor="pointer"
+        onClick={(e) => onNodeClick(node, e)}
       >
         <title>{t(name) + "\n" + format(value)}</title>
       </rect>

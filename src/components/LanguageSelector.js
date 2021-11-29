@@ -1,27 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { useTranslation } from "react-i18next";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-
-const languageOptions = [
-  {
-    key: "en",
-    value: "English",
-  },
-  {
-    key: "es",
-    value: "Spanish",
-  },
-];
+import { useSelector } from "react-redux";
+import { useActions } from "../hooks";
 
 function LanguageSelector() {
+  const { languageOptions, language } = useSelector((store) => store.i18nState);
   const { i18n } = useTranslation();
-  const [language, setLanguage] = useState(languageOptions[0].value);
-
+  const { changeLanguage } = useActions();
   const handleLanguageChange = (event) => {
-    setLanguage(event.target.value);
+    changeLanguage({ language: event.target.value });
   };
 
   useEffect(() => {
@@ -38,13 +29,16 @@ function LanguageSelector() {
         <InputLabel id="language-id">Language</InputLabel>
         <Select
           labelId="language-id"
-          id="language"
           value={language}
           onChange={handleLanguageChange}
           autoWidth
         >
           {languageOptions.map((option) => (
-            <MenuItem key={option.key} value={option.value}>
+            <MenuItem
+              key={option.key}
+              value={option.value}
+              data-testid="select-option"
+            >
               {option.value}
             </MenuItem>
           ))}
