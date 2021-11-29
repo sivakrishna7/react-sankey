@@ -3,18 +3,34 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.7.0",
+    "@emotion/style": "^0.8.0",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.2.1",
+    "@react-hook/size": "^2.1.2",
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.24.0",
+    "chroma-js": "^2.1.2",
+    "d3": "^7.1.1",
+    "d3-sankey": "^0.12.3",
+    "i18next": "^21.5.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
+    "react-i18next": "^11.14.3",
+    "react-modal": "^3.14.4",
+    "react-proptypes": "^1.0.0",
+    "react-redux": "^7.2.6",
+    "react-scripts": "*",
+    "redux": "^4.1.2",
+    "redux-thunk": "^2.4.1",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!d3-array)/\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -34,5 +50,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "resize-observer-polyfill": "^1.5.1"
   }
 }
