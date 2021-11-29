@@ -12,6 +12,8 @@ import PropTypes from "prop-types";
 import SankeyLink from "./SankeyLink";
 import SankeyNode from "./SankeyNode";
 import { getInnerDimensions } from "../../utils/getInnerDimensions";
+import _ from "lodash";
+import { useEffect } from "react";
 
 const ALIGNMENTS = {
   justify: sankeyJustify,
@@ -28,8 +30,8 @@ const DEFAULT_MARGINS = {
 };
 
 const SankeyChart = ({
-  nodes: nodesCopy,
-  links: linksCopy,
+  nodes,
+  links,
   margin = DEFAULT_MARGINS,
   nodePadding = 10,
   nodeWidth = 10,
@@ -41,6 +43,13 @@ const SankeyChart = ({
   onLinkMouseOver,
   onLinkMouseOut,
 }) => {
+  const chartData = {
+    nodes: _.cloneDeep(nodes),
+    links: _.cloneDeep(links),
+  };
+  // useEffect(() => {
+
+  // }, [nodes, links])
   const { marginLeft, marginTop, marginRight, marginBottom } =
     getInnerDimensions(
       {
@@ -57,19 +66,21 @@ const SankeyChart = ({
     ])
     .nodeWidth(nodeWidth)
     .nodePadding(nodePadding)
-    .nodes(nodesCopy)
-    .links(linksCopy)
+    .nodes(chartData.nodes)
+    .links(chartData.links)
     .nodeAlign(ALIGNMENTS[align])
     .iterations(layout);
-  sankeyInstance(nodesCopy);
+  sankeyInstance(chartData.nodes);
 
-  const color = chroma.scale("Set2").classes(nodesCopy.length);
-  const colorScale = scaleLinear().domain([0, nodesCopy.length]).range([0, 1]);
+  const color = chroma.scale("Set2").classes(chartData.nodes.length);
+  const colorScale = scaleLinear()
+    .domain([0, chartData.nodes.length])
+    .range([0, 1]);
   const path = sankeyLinkHorizontal();
   return (
     <svg width={width} height={height}>
       <g style={{ mixBlendMode: "multiply" }}>
-        {nodesCopy.map((node, i) => {
+        {chartData.nodes.map((node, i) => {
           return (
             <SankeyNode
               key={node.name}
@@ -79,7 +90,7 @@ const SankeyChart = ({
             />
           );
         })}
-        {linksCopy.map((link, i) => {
+        {chartData.links.map((link, i) => {
           return (
             <SankeyLink
               data={path(link)}

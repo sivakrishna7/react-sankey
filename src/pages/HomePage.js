@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 
 import { SankeyChart } from "../components";
 import { useActions, useDimension } from "../hooks";
+import { AddNode, AddLink } from "../components";
 
 const styles = {
   homeContainer: { width: "100%", margin: "1em", borderBox: "none" },
@@ -87,6 +88,14 @@ const HomePage = () => {
       <Typography variant="h4" style={{ textAlign: "center" }}>
         {t("cashFlow")}
       </Typography>
+      <Grid container>
+        <Grid item xs={4}>
+          <AddNode />
+        </Grid>
+        <Grid item xs={8}>
+          <AddLink />
+        </Grid>
+      </Grid>
 
       {isDataAvailable && (
         <SankeyChart

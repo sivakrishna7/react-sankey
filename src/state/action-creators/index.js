@@ -36,7 +36,6 @@ export const loadData = (remoteFetch = false) => {
 
 export const updateLinkAndCloseModal = (payload) => {
   return (dispatch) => {
-    console.log({ payload });
     dispatch({ type: ActionType.UPDATE_LINK, payload });
     dispatch({ type: ActionType.UNSET_ACTIVE_LINK });
   };
@@ -53,4 +52,12 @@ export const closeModalAndRemoveActiveItem = () => {
 export const updateActiveLinkWeight = (payload) => {
   return (dispatch) =>
     dispatch({ type: ActionType.UPDATE_ACTIVE_LINK_WEIGHT, payload });
+};
+
+export const addNode = (payload) => {
+  return (dispatch) => dispatch({ type: ActionType.ADD_NODE, payload });
+};
+
+export const addLink = (payload) => {
+  return (dispatch) => dispatch({ type: ActionType.ADD_LINK, payload });
 };

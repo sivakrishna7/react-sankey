@@ -9,13 +9,11 @@ const initialState = {
 const sankeyUpdateReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.SET_ACTIVE_LINK:
-      console.log.apply(action.payload);
       const newState = {
         showUpdateLinkModal: true,
         activeLink: action.payload.link,
         activeLinkWeight: action.payload.link.value,
       };
-      console.log({ newState });
       return newState;
     case ActionType.UNSET_ACTIVE_LINK:
       state.activeLink = {};

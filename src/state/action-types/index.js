@@ -10,4 +10,6 @@ export const ActionType = {
   UNSET_ACTIVE_LINK: "unset_active_link",
   UPDATE_LINK_AND_CLOSE_MODAL: "update_link_and_close_modal",
   UPDATE_ACTIVE_LINK_WEIGHT: "update_active_link_weight",
+  ADD_NODE: "add_node",
+  ADD_LINK: "add_link",
 };
