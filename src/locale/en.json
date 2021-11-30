@@ -8,5 +8,9 @@
   "Electric Bill": "Electric Bill",
   "Office Rent": "Office Rent",
   "Home Rent": "Home Rent",
-  "Rent": "Rent"
+  "Rent": "Rent",
+  "addNode": "Add Node",
+  "addLink": "Add Link",
+  "selectSource": "Select Source",
+  "selectTarget": "Select Target"
 }

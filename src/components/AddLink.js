@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useActions } from "../hooks";
 
@@ -11,6 +12,7 @@ const AddLink = () => {
     target: NaN,
     weight: "Weight",
   });
+  const { t } = useTranslation();
   const { nodes } = useSelector((store) => store.transactions);
   const { addLink } = useActions();
 
@@ -44,7 +46,7 @@ const AddLink = () => {
 
   sourceNodes.unshift(
     <option value={NaN} key="000">
-      {"Select Source"}
+      {t("selectSource")}
     </option>
   );
 
@@ -58,13 +60,14 @@ const AddLink = () => {
 
   targetNodes.unshift(
     <option value={NaN} key="000">
-      {"Select Target"}
+      {t("selectTarget")}
     </option>
   );
 
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
       <select
+        data-testid="link-source-select"
         style={styles.cursor}
         id="source"
         onChange={handleChange("source")}
@@ -73,6 +76,7 @@ const AddLink = () => {
       </select>
 
       <select
+        data-testid="link-target-select"
         style={styles.cursor}
         id="target"
         onChange={handleChange("target")}
@@ -81,6 +85,7 @@ const AddLink = () => {
       </select>
 
       <input
+        data-testid="link-input"
         value={link.weight}
         onFocus={() => clearInput()}
         onBlur={() => setDefault()}
@@ -89,6 +94,7 @@ const AddLink = () => {
 
       <span>
         <button
+          data-testid="add-link-button"
           style={styles.cursor}
           onClick={() =>
             addLink({
@@ -98,7 +104,7 @@ const AddLink = () => {
             })
           }
         >
-          Add Link
+          {t("addLink")}
         </button>
       </span>
     </div>

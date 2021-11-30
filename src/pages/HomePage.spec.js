@@ -1,21 +1,145 @@
 import HomePage from "./HomePage";
-import {
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-} from "../test/setup";
+import { fireEvent, render as rtlRender, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import "../locale/i18n";
-import en from "../locale/en.json";
-import es from "../locale/es.json";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import { createStore, applyMiddleware } from "redux";
+import reducers from "../state/reducers";
+
+const languageOptions = [
+  {
+    key: "en",
+    value: "English",
+  },
+  {
+    key: "es",
+    value: "Spanish",
+  },
+];
+const initialState = {
+  transactions: {
+    nodes: [
+      { name: "Salary" },
+      { name: "Bills" },
+      { name: "Electric Bill" },
+      { name: "Mobile Bill" },
+    ],
+    links: [
+      { source: 0, target: 1, value: 3000 },
+      { source: 1, target: 2, value: 1000 },
+      { source: 1, target: 3, value: 2000 },
+    ],
+  },
+  modalState: {
+    activeItem: {},
+    showUpdateModal: false,
+    activeItemValue: "",
+    itemType: "",
+  },
+  i18nState: { language: languageOptions[0]["value"], languageOptions },
+};
+
+function render(
+  ui,
+  {
+    initialState,
+    store = createStore(reducers, initialState, applyMiddleware(thunk)),
+    ...rtlOptions
+  } = {}
+) {
+  function Wrapper({ children }) {
+    return <Provider store={store}>{children}</Provider>;
+  }
+  return {
+    ...rtlRender(ui, { wrapper: Wrapper, ...rtlOptions }),
+    store,
+  };
+}
 
 describe("Home Page", () => {
+  const setup = () => render(<HomePage />, { initialState });
   describe("Interactions", () => {
-    it("has Language selection", () => {
-      render(<HomePage />);
-      const language = screen.queryByLabelText("Language");
-      expect(language).toBeInTheDocument();
+    it("has node input", () => {
+      setup();
+      const nodeInputEl = screen.queryByTestId("node-input");
+      expect(nodeInputEl).toBeInTheDocument();
+    });
+    it("has add node button", () => {
+      setup();
+      const nodeButtonEl = screen.queryByRole("button", { name: "Add Node" });
+      expect(nodeButtonEl).toBeInTheDocument();
+    });
+    it("adds node to chart", async () => {
+      setup();
+      const nodeInputEl = screen.queryByTestId("node-input");
+      userEvent.clear(nodeInputEl);
+      userEvent.type(nodeInputEl, "Sample Node");
+      const nodeButtonEl = screen.queryByRole("button", { name: "Add Node" });
+      userEvent.click(nodeButtonEl);
+      expect(screen.queryAllByText(/sample node/i).length).toBe(4);
+    });
+    it("has link input", () => {
+      setup();
+      const linkInputEl = screen.queryByTestId("link-input");
+      expect(linkInputEl).toBeInTheDocument();
+    });
+    it("has add link button", () => {
+      setup();
+      const linkButtonEl = screen.queryByRole("button", { name: "Add Link" });
+      expect(linkButtonEl).toBeInTheDocument();
+    });
+    it("has link select source dropdown", () => {
+      setup();
+      const linkSelectSourceEl = screen.queryByTestId("link-source-select");
+      expect(linkSelectSourceEl).toBeInTheDocument();
+    });
+    it("has link select target dropdown", () => {
+      setup();
+      const linkSelectTargetEl = screen.queryByTestId("link-target-select");
+      expect(linkSelectTargetEl).toBeInTheDocument();
+    });
+    it("adds a link to chart", async () => {
+      setup();
+      const linkInputEl = screen.queryByTestId("link-input");
+      userEvent.selectOptions(screen.getByTestId("link-source-select"), ["0"]);
+      userEvent.selectOptions(screen.getByTestId("link-target-select"), ["1"]);
+      userEvent.type(linkInputEl, "10000");
+      const linkButtonEl = screen.queryByRole("button", { name: "Add Link" });
+      userEvent.click(linkButtonEl);
+      const updatedLink = screen.queryByTestId(/salary-to-bills-is-10000/i);
+      expect(updatedLink).toBeInTheDocument();
+    });
+    it("opens modal upon clicking link", async () => {
+      setup();
+      const linkPathList = screen.queryAllByTestId("sankey-link-path");
+      console.log(linkPathList[0], "siva");
+      userEvent.click(linkPathList[0]);
+      const modalEl = await screen.findByRole("dialog");
+      expect(modalEl).toBeInTheDocument();
+    });
+    it("updates link weight from modal upon clicking link", async () => {
+      setup();
+      const linkPathList = screen.queryAllByTestId("sankey-link-path");
+      userEvent.click(linkPathList[0]);
+      const modalEl = await screen.findByRole("dialog");
+      expect(modalEl).toBeInTheDocument();
+      const activeItemInputEl = screen.queryByTestId("active-item-update");
+      userEvent.clear(activeItemInputEl);
+      userEvent.type(activeItemInputEl, "55000");
+      const saveButtonEl = screen.queryByTestId("save-on-modal");
+      userEvent.click(saveButtonEl);
+      expect(modalEl).not.toBeInTheDocument();
+      const updatedLink = screen.queryByTestId(/55000/i);
+      expect(updatedLink).toBeInTheDocument();
+    });
+    it("renders nodes and links", async () => {
+      setup();
+      const linkPathList = screen.queryAllByTestId("sankey-link-path");
+      const nodeRectList = screen.queryAllByTestId("sankey-node-rect");
+      expect(linkPathList).toHaveLength(3);
+      expect(nodeRectList).toHaveLength(4);
     });
   });
 });
+
+console.error = () => {};

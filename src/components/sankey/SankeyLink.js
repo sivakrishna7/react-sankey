@@ -32,8 +32,11 @@ function SankeyLink({
       onMouseOut={(e) => onLinkMouseOut(node, e)}
       strokeWidth={strokeWidth}
       fill="none"
+      data-testid="sankey-link-path"
     >
-      <title>
+      <title
+        data-testid={`${node.source.name}-to-${node.target.name}-is-${node.value}`}
+      >
         {node.source.name +
           " → " +
           node.target.name +

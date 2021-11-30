@@ -113,6 +113,7 @@ const HomePage = () => {
         />
       )}
       <Modal
+        data-testid="update-modal"
         isOpen={showUpdateModal}
         onRequestClose={closeModal}
         style={styles.modal}
@@ -125,15 +126,19 @@ const HomePage = () => {
         <TextField
           autoFocus
           margin="dense"
-          id="link-update"
           value={activeItemValue}
           fullWidth
           onChange={handleInputChange}
           variant="standard"
+          inputProps={{
+            "data-testid": "active-item-update",
+          }}
         />
         <Grid xs={12} item container justifyContent="space-between">
           <Button onClick={closeModal}>Cancel</Button>
-          <Button onClick={closeAndSaveModal}>Apply Changes</Button>
+          <Button data-testid="save-on-modal" onClick={closeAndSaveModal}>
+            Apply Changes
+          </Button>
         </Grid>
       </Modal>
     </div>

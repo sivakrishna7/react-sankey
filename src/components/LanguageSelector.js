@@ -26,7 +26,9 @@ function LanguageSelector() {
   return (
     <div>
       <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="language-id">Language</InputLabel>
+        <InputLabel data-testid="language-label" id="language-id">
+          Language
+        </InputLabel>
         <Select
           labelId="language-id"
           value={language}

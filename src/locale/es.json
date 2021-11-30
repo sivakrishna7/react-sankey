@@ -8,5 +8,9 @@
   "Electric Bill": "Cixtcele Llib",
   "Office Rent": "Eciffo Tner",
   "Home Rent": "Tner Emoh",
-  "Rent": "Tner"
+  "Rent": "Tner",
+  "addNode": "Dda Edon",
+  "addLink": "Dda Knil",
+  "selectSource": "Tceles Ecruos",
+  "selectTarget": "Tceles Tegrat"
 }

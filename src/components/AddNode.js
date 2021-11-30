@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useActions } from "../hooks";
 
 const AddNode = () => {
   const [node, setNode] = useState({ name: "" });
+  const { t } = useTranslation();
   const { nodes } = useSelector((store) => store.transactions);
   const { addNode } = useActions();
   useEffect(() => {
@@ -22,13 +24,18 @@ const AddNode = () => {
 
   return (
     <div>
-      <input value={defaultValue} onChange={handleChange("name")} />
+      <input
+        data-testid="node-input"
+        value={defaultValue}
+        onChange={handleChange("name")}
+      />
       <span>
         <button
+          data-testid="add-node-button"
           style={{ cursor: "pointer" }}
           onClick={() => addNode({ name: node.name })}
         >
-          Add Node
+          {t("addNode")}
         </button>
       </span>
     </div>

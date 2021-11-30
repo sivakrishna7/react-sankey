@@ -30,6 +30,7 @@ const SankeyNode = ({
         height={y1 - y0}
         fill={color}
         cursor="pointer"
+        data-testid="sankey-node-rect"
         onClick={(e) => onNodeClick(node, e)}
       >
         <title>{t(name) + "\n" + format(value)}</title>
