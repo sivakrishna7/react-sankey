@@ -16,7 +16,7 @@ const styles = {
 };
 const NavBar = () => {
   return (
-    <AppBar position="static" style={styles.appBar}>
+    <AppBar position="static" style={styles.appBar} data-testid="nav-bar">
       <Toolbar style={styles.toolbar}>
         <div xs={6} style={styles.container}>
           <a href="https://www.centime.com" target="_blank" rel="noreferrer">

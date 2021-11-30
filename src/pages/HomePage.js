@@ -88,8 +88,12 @@ const HomePage = () => {
     !loading && !error && nodes.length > 0 && links.length > 0;
 
   return (
-    <div ref={divRef} style={styles.homeContainer}>
-      <Typography variant="h4" style={{ textAlign: "center" }}>
+    <div ref={divRef} style={styles.homeContainer} data-testid="home-page">
+      <Typography
+        variant="h4"
+        style={{ textAlign: "center" }}
+        data-testid="cashflow-header"
+      >
         {t("cashFlow")}
       </Typography>
       <Grid container>
@@ -135,7 +139,9 @@ const HomePage = () => {
           }}
         />
         <Grid xs={12} item container justifyContent="space-between">
-          <Button onClick={closeModal}>Cancel</Button>
+          <Button data-testid="close-modal" onClick={closeModal}>
+            Cancel
+          </Button>
           <Button data-testid="save-on-modal" onClick={closeAndSaveModal}>
             Apply Changes
           </Button>

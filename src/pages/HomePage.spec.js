@@ -1,5 +1,5 @@
 import HomePage from "./HomePage";
-import { fireEvent, render as rtlRender, screen } from "@testing-library/react";
+import { render as rtlRender, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
@@ -112,10 +112,19 @@ describe("Home Page", () => {
     it("opens modal upon clicking link", async () => {
       setup();
       const linkPathList = screen.queryAllByTestId("sankey-link-path");
-      console.log(linkPathList[0], "siva");
       userEvent.click(linkPathList[0]);
       const modalEl = await screen.findByRole("dialog");
       expect(modalEl).toBeInTheDocument();
+    });
+    it("closes modal upon clicking cancel without any update", async () => {
+      setup();
+      const linkPathList = screen.queryAllByTestId("sankey-link-path");
+      userEvent.click(linkPathList[0]);
+      const modalEl = await screen.findByRole("dialog");
+      expect(modalEl).toBeInTheDocument();
+      const cancelButtonEl = screen.queryByTestId("close-modal");
+      userEvent.click(cancelButtonEl);
+      expect(modalEl).not.toBeInTheDocument();
     });
     it("updates link weight from modal upon clicking link", async () => {
       setup();
@@ -132,12 +141,56 @@ describe("Home Page", () => {
       const updatedLink = screen.queryByTestId(/55000/i);
       expect(updatedLink).toBeInTheDocument();
     });
+    it("deletes a link", async () => {
+      setup();
+      const linkPathList = screen.queryAllByTestId("sankey-link-path");
+      const linkTitle = within(linkPathList[0]).getByText(/weight/i);
+      const linkId = within(linkTitle)
+        .getByText(/weight/i)
+        .getAttribute("data-testid");
+      userEvent.click(linkPathList[0]);
+      const modalEl = await screen.findByRole("dialog");
+      expect(modalEl).toBeInTheDocument();
+      const activeItemInputEl = screen.queryByTestId("active-item-update");
+      userEvent.clear(activeItemInputEl);
+      const saveButtonEl = screen.queryByTestId("save-on-modal");
+      userEvent.click(saveButtonEl);
+      expect(modalEl).not.toBeInTheDocument();
+      const updatedLink = screen.queryByTestId(linkId);
+      expect(updatedLink).not.toBeInTheDocument();
+    });
+    it("updates node name from modal upon clicking node", async () => {
+      setup();
+      const nodeRectList = screen.queryAllByTestId("sankey-node-rect");
+      userEvent.click(nodeRectList[0]);
+      const modalEl = await screen.findByRole("dialog");
+      expect(modalEl).toBeInTheDocument();
+      const activeItemInputEl = screen.queryByTestId("active-item-update");
+      userEvent.clear(activeItemInputEl);
+      userEvent.type(activeItemInputEl, "Annual Salary");
+      const saveButtonEl = screen.queryByTestId("save-on-modal");
+      userEvent.click(saveButtonEl);
+      expect(modalEl).not.toBeInTheDocument();
+      expect(screen.queryAllByText(/annual salary/i).length).not.toBe(0);
+    });
     it("renders nodes and links", async () => {
       setup();
       const linkPathList = screen.queryAllByTestId("sankey-link-path");
       const nodeRectList = screen.queryAllByTestId("sankey-node-rect");
       expect(linkPathList).toHaveLength(3);
       expect(nodeRectList).toHaveLength(4);
+    });
+  });
+
+  describe("Layout", () => {
+    it("renders header", () => {
+      render(<HomePage />, { initialState });
+      expect(screen.queryByTestId("cashflow-header")).toBeInTheDocument();
+    });
+
+    it("renders sankeychart", async () => {
+      render(<HomePage />, { initialState });
+      expect(screen.queryByTestId("sankey-chart")).toBeInTheDocument();
     });
   });
 });

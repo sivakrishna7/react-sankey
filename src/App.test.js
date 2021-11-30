@@ -39,6 +39,17 @@ describe("Language Selection", () => {
       expect(screen.queryByText("Wolf Hsac")).toBeInTheDocument();
     });
   });
+  describe("Layout", () => {
+    it("renders nav bar", () => {
+      render(<RootWrapper />);
+      expect(screen.queryByTestId("nav-bar")).toBeInTheDocument();
+    });
+
+    it("renders homepage", async () => {
+      render(<RootWrapper />);
+      expect(screen.queryByTestId("home-page")).toBeInTheDocument();
+    });
+  });
 });
 
 console.error = () => {};

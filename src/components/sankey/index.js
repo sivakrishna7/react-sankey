@@ -75,7 +75,7 @@ const SankeyChart = ({
     .range([0, 1]);
   const path = sankeyLinkHorizontal();
   return (
-    <svg width={width} height={height}>
+    <svg width={width} height={height} data-testid="sankey-chart">
       <g style={{ mixBlendMode: "multiply" }}>
         {chartData.nodes.map((node, i) => {
           return (
