@@ -26,6 +26,14 @@ const AddLink = () => {
     };
   };
 
+  const handleAddLink = () => {
+    addLink({
+      source: parseInt(link.source),
+      target: parseInt(link.target),
+      value: parseInt(link.weight),
+    });
+  };
+
   const clearInput = () => {
     setLink((prevState) => ({ ...prevState, weight: "" }));
   };
@@ -96,13 +104,7 @@ const AddLink = () => {
         <button
           data-testid="add-link-button"
           style={styles.cursor}
-          onClick={() =>
-            addLink({
-              source: parseInt(link.source),
-              target: parseInt(link.target),
-              value: parseInt(link.weight),
-            })
-          }
+          onClick={handleAddLink}
         >
           {t("addLink")}
         </button>

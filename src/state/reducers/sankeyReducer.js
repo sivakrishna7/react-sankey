@@ -70,6 +70,13 @@ const reducer = (state = initialState, action) => {
           ({ source, target }) =>
             source === payload.source && target === payload.target
         );
+        const isCircularRef = updatedLinks.findIndex(
+          ({ source, target }) =>
+            source === payload.target && target === payload.source
+        );
+        if (isCircularRef !== -1 || payload.source === payload.target) {
+          return state;
+        }
         if (linkIndex === -1) {
           updatedLinks.push({
             source: payload.source,
